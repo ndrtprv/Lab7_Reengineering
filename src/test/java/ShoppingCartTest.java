@@ -11,15 +11,21 @@ public class ShoppingCartTest {
      */
     @Test
     public void testAppendFormatted() {
-        System.out.println("appendFormatted");
-        StringBuilder sb = null;
-        String value = "";
-        int align = 0;
-        int width = 0;
-        ShoppingCart.appendFormatted(sb, value, align, width);
-        // TODO review the generated test code and remove the
-        // default call to fail.
-        fail("The test case is a prototype.");
+        StringBuilder sb = new StringBuilder();
+        ShoppingCart.appendFormatted(sb, "SomeLine", 0, 14);
+        assertEquals(sb.toString(), " SomeLine ");
+        sb = new StringBuilder();
+        ShoppingCart.appendFormatted(sb, "SomeLine", 0, 15);
+        assertEquals(sb.toString(), " SomeLine ");
+        sb = new StringBuilder();
+        ShoppingCart.appendFormatted(sb, "SomeLine", 0, 5);
+        assertEquals(sb.toString(), "SomeL ");
+        sb = new StringBuilder();
+        ShoppingCart.appendFormatted(sb, "SomeLine", 1, 15);
+        assertEquals(sb.toString(), " SomeLine ");
+        sb = new StringBuilder();
+        ShoppingCart.appendFormatted(sb, "SomeLine", -1, 15);
+        assertEquals(sb.toString(), "SomeLine ");
     }
 
     /**
