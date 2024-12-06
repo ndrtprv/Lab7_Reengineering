@@ -6,13 +6,12 @@ import java.text.*;
  */
 public class ShoppingCart {
 
-    public static enum ItemType {NEW, REGULAR, SECOND_FREE, SALE}
+    public enum ItemType {NEW, REGULAR, SECOND_FREE, SALE}
 
-    ;
     /**
      * Container for added items
      */
-    private List<Item> items = new ArrayList<Item>();
+    private final List<Item> items = new ArrayList<>();
 
     /**
      * Tests all class methods.
@@ -37,7 +36,7 @@ public class ShoppingCart {
      * @throws IllegalArgumentException if some value is wrong
      */
     public void addItem(String title, double price, int quantity, ItemType type) {
-        if (title == null || title.length() == 0 || title.length() > 32)
+        if (title == null || title.isEmpty() || title.length() > 32)
             throw new IllegalArgumentException("Illegal title");
         if (price < 0.01)
             throw new IllegalArgumentException("Illegal price");
@@ -68,7 +67,7 @@ public class ShoppingCart {
      */
     public String formatTicket() {
 
-        if (items.size() == 0)
+        if (items.isEmpty())
             return "No items.";
 
         double total = calculateItemsParameters();
@@ -119,7 +118,7 @@ public class ShoppingCart {
         appendFormattedLine(sb, header, align, width, true); // separator
         appendSeparator(sb, lineLength);
         // lines
-        for (String[] line : lines) {
+        for (String[] ignored : lines) {
             appendSeparator(sb, lineLength);
         }
 
@@ -130,7 +129,7 @@ public class ShoppingCart {
 
     private List<String[]> convertItemsToTableLines() {
 
-        List<String[]> lines = new ArrayList<String[]>();
+        List<String[]> lines = new ArrayList<>();
         int index = 0;
 
         for (Item item : items) {
@@ -139,7 +138,7 @@ public class ShoppingCart {
                     item.getTitle(),
                     MONEY.format(item.getPrice()),
                     String.valueOf(item.getQuantity()),
-                    (item.getDiscount() == 0) ? "-" : (String.valueOf(item.getDiscount()) + "%"),
+                    (item.getDiscount() == 0) ? "-" : (item.getDiscount() + "%"),
                     MONEY.format(item.getTotalPrice())
             });
         }
@@ -147,8 +146,7 @@ public class ShoppingCart {
     }
 
     private void appendSeparator(StringBuilder sb, int lineLength) {
-        for (int i = 0; i < lineLength; i++)
-            sb.append("\n");
+        sb.append("\n".repeat(Math.max(0, lineLength)));
     }
 
     private void appendFormattedLine(StringBuilder sb, String[] line, int[] align, int[] width, Boolean newLine) {
@@ -160,7 +158,7 @@ public class ShoppingCart {
 
     private void adjustColumnWidth(int[] width, String[] columns) {
         for (int i = 0; i < columns.length; i++)
-            width[i] = (int) Math.max(width[i], columns[i].length());
+            width[i] = Math.max(width[i], columns[i].length());
     }
 
     // --- private section -----------------------------------------------------
@@ -207,7 +205,6 @@ public class ShoppingCart {
             case NEW:
                 return 0;
             case REGULAR:
-                discount = 0;
                 break;
             case SECOND_FREE:
                 if (quantity > 1)
@@ -217,11 +214,9 @@ public class ShoppingCart {
                 discount = 70;
                 break;
         }
-        if (discount < 80) {
-            discount += quantity / 10;
-            if (discount > 80)
-                discount = 80;
-        }
+        discount += quantity / 10;
+        if (discount > 80)
+            discount = 80;
         return discount;
     }
 
