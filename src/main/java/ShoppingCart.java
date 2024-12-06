@@ -31,7 +31,7 @@ public class ShoppingCart {
      * Adds new item.
      *
      * @param title    item title 1 to 32 symbols
-     * @param price    item ptice in USD, > 0
+     * @param price    item price in USD, > 0
      * @param quantity item quantity, from 1
      * @param type     item type
      * @throws IllegalArgumentException if some value is wrong
@@ -107,33 +107,31 @@ public class ShoppingCart {
         StringBuilder sb = new StringBuilder();
 
         // header
-        for (int i = 0; i < header.length; i++)
-            appendFormatted(sb, header[i], align[i], width[i]);
-        sb.append("\n");
+        appendFormattedLine(sb, header, align, width, true);
 
         // separator
-        for (int i = 0; i < lineLength; i++)
-            sb.append("-");
-        sb.append("\n");
+        appendSeparator(sb, lineLength);
 
         // lines
         for (String[] line : lines) {
-            for (int i = 0; i < line.length; i++)
-                appendFormatted(sb, line[i], align[i], width[i]);
-            sb.append("\n");
-        }
-
-        if (lines.size() > 0) {
-            // separator
-            for (int i = 0; i < lineLength; i++)
-                sb.append("-");
-            sb.append("\n");
+            appendSeparator(sb, lineLength);
         }
 
         // footer
-        for (int i = 0; i < footer.length; i++)
-            appendFormatted(sb, footer[i], align[i], width[i]);
+        appendFormattedLine(sb, footer, align, width, false);
         return sb.toString();
+    }
+
+    private void appendSeparator(StringBuilder sb, int lineLength) {
+        for (int i = 0; i < lineLength; i++)
+            sb.append("\n");
+    }
+
+    private void appendFormattedLine(StringBuilder sb, String[] line, int[] align, int[] width, Boolean newLine) {
+        for (int i = 0; i < line.length; i++)
+            appendFormatted(sb, line[i], align[i], width[i]);
+        if (newLine)
+            sb.append("\n");
     }
 
     private void adjustColumnWidth(int[] width, String[] columns) {
