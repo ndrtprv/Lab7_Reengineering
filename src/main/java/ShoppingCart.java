@@ -76,17 +76,17 @@ public class ShoppingCart {
         double total = 0.00;
         int index = 0;
         for (Item item : items) {
-            int discount = calculateDiscount(item.getItemType(), item.getQuantity());
-            double itemTotal = item.getPrice() * item.getQuantity() * (100.00 - discount) / 100.00;
+            item.setDiscount(calculateDiscount(item.getItemType(), item.getQuantity()));
+            item.setTotalPrice(item.getPrice() * item.getQuantity() * (100.00 - item.getDiscount()) / 100.00);
             lines.add(new String[]{
                     String.valueOf(++index),
                     item.getTitle(),
                     MONEY.format(item.getPrice()),
                     String.valueOf(item.getQuantity()),
-                    (discount == 0) ? "-" : (String.valueOf(discount) + "%"),
-                    MONEY.format(itemTotal)
+                    (item.getDiscount() == 0) ? "-" : (String.valueOf(item.getDiscount()) + "%"),
+                    MONEY.format(item.getTotalPrice())
             });
-            total += itemTotal;
+            total += item.getTotalPrice();
         }
 
         String[] footer = {String.valueOf(index), "", "", "", "",
@@ -209,6 +209,8 @@ public class ShoppingCart {
         private double price;
         private int quantity;
         private ItemType type;
+        private int discount;
+        private double total;
 
         public String getTitle() {
             return title;
@@ -240,6 +242,22 @@ public class ShoppingCart {
 
         public void setItemType(ItemType type) {
             this.type = type;
+        }
+
+        public int getDiscount() {
+            return discount;
+        }
+
+        public void setDiscount(int discount) {
+            this.discount = discount;
+        }
+
+        public double getTotalPrice() {
+            return total;
+        }
+
+        public void setTotalPrice(double total) {
+            this.total = total;
         }
     }
 }
