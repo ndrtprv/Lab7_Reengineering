@@ -96,12 +96,9 @@ public class ShoppingCart {
         // column max length
         int[] width = new int[]{0, 0, 0, 0, 0, 0};
         for (String[] line : lines)
-            for (int i = 0; i < line.length; i++)
-                width[i] = (int) Math.max(width[i], line[i].length());
-        for (int i = 0; i < header.length; i++)
-            width[i] = (int) Math.max(width[i], header[i].length());
-        for (int i = 0; i < footer.length; i++)
-            width[i] = (int) Math.max(width[i], footer[i].length());
+            adjustColumnWidth(width, line);
+        adjustColumnWidth(width, header);
+        adjustColumnWidth(width, footer);
 
         // line length
         int lineLength = width.length - 1;
@@ -137,6 +134,11 @@ public class ShoppingCart {
         for (int i = 0; i < footer.length; i++)
             appendFormatted(sb, footer[i], align[i], width[i]);
         return sb.toString();
+    }
+
+    private void adjustColumnWidth(int[] width, String[] columns) {
+        for (int i = 0; i < columns.length; i++)
+            width[i] = (int) Math.max(width[i], columns[i].length());
     }
 
     // --- private section -----------------------------------------------------
